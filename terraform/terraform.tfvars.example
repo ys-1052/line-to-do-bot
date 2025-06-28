@@ -1,0 +1,4 @@
+project_id = "your-gcp-project-id"
+region = "asia-northeast1"
+line_channel_secret = "your-line-channel-secret"
+line_channel_token = "your-line-channel-access-token"

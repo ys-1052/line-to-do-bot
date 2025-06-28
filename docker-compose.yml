@@ -1,0 +1,40 @@
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - gcloud-config:/root/.config/gcloud:ro
+    working_dir: /app
+    env_file:
+      - .env
+    command: go run ./cmd/server
+    stdin_open: true
+    tty: true
+
+  gcloud:
+    image: google/cloud-sdk:alpine
+    volumes:
+      - .:/app
+      - gcloud-config:/root/.config/gcloud
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    command: sh
+
+  terraform:
+    image: hashicorp/terraform:1.5
+    volumes:
+      - .:/app
+      - gcloud-config:/root/.config/gcloud
+    working_dir: /app/terraform
+    stdin_open: true
+    tty: true
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/root/.config/gcloud/application_default_credentials.json
+
+volumes:
+  gcloud-config:
